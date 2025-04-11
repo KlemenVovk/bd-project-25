@@ -10,3 +10,6 @@ https://data.cityofnewyork.us/City-Government/NYC-Permitted-Event-Information-Hi
 
 # Businesses
 https://data.cityofnewyork.us/Business/Issued-Licenses/w7w3-xahh/about_data
+
+# Zipcode
+https://download.geonames.org/export/zip/
