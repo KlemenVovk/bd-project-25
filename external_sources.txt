@@ -1,0 +1,12 @@
+# Schools
+https://data.cityofnewyork.us/Education/2019-2020-School-Locations/wg9x-4ke6/data_preview
+
+# Weather
+https://open-meteo.com/en/docs/historical-weather-api
+
+# Events - police precinct centers as event Locations
+https://data.cityofnewyork.us/City-Government/Police-Precincts/y76i-bdw7/about_data
+https://data.cityofnewyork.us/City-Government/NYC-Permitted-Event-Information-Historical/bkfu-528j/about_data
+
+# Businesses
+https://data.cityofnewyork.us/Business/Issued-Licenses/w7w3-xahh/about_data
