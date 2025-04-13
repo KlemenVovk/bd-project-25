@@ -1,12 +1,15 @@
 import pyarrow as pa
-from glob import glob
 import numpy as np
 
-ROOT = "data/raw"
-# ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
+RAW_DATA_ROOT = "data/raw"
+# RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
 YEARS = [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
           2020, 2021, 2022, 2023, 2024, 2025]
 
+# TASK 1
+TASK1_OUT_ROOT = "data/task1"
+TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
+ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
 
 TASK1_SCHEMA = pa.schema([
     ("vendor_id", pa.int8()),
@@ -58,15 +61,28 @@ TASK1_NP_SCHEMA = {
     "year": np.uint16
 }
 
-
-TASK1_OUT_ROOT = "data/task1"
-TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
-ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
-
-
-
-def get_files(root_path, year):
-    """
-    Get all files in the given path for the specified year.
-    """
-    return sorted(list(glob(f"{root_path}/yellow_tripdata_{year}*.parquet")))
+COLUMN_CONSISTENCY_NAMING_MAP = {
+    "End_Lat": "dropoff_latitude",
+    "End_Lon": "dropoff_longitude",
+    "Start_Lat": "pickup_latitude",
+    "Start_Lon": "pickup_longitude",
+    "Fare_Amt": "fare_amount",
+    "Tip_Amt": "tip_amount",
+    "Tolls_Amt": "tolls_amount",
+    "Total_Amt": "total_amount",
+    "Passenger_Count": "passenger_count",
+    "Payment_Type": "payment_type",
+    "Rate_Code": "rate_code_id",
+    "rate_code": "rate_code_id",
+    "RatecodeID": "rate_code_id",
+    "Trip_Distance": "trip_distance",
+    "Trip_Dropoff_DateTime": "tpep_dropoff_datetime",
+    "Trip_Pickup_DateTime": "tpep_pickup_datetime",
+    "tpep_dropoff_datetime": "dropoff_datetime",
+    "tpep_pickup_datetime": "pickup_datetime",
+    "Airport_fee": "airport_fee",
+    "VendorID": "vendor_id",
+    "vendor_name": "vendor_id",
+    "surcharge": "extra",
+    "store_and_forward": "store_and_fwd_flag",
+}
