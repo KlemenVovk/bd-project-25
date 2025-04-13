@@ -1,13 +1,14 @@
 import pyarrow as pa
 import numpy as np
 
-RAW_DATA_ROOT = "data/raw"
-# RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
+# RAW_DATA_ROOT = "data/raw"
+RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
 YEARS = [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
           2020, 2021, 2022, 2023, 2024, 2025]
 
 # TASK 1
-TASK1_OUT_ROOT = "data/task1"
+# TASK1_OUT_ROOT = "data/task1"
+TASK1_OUT_ROOT = "/d/hpc/projects/FRI/kv4582/bd25/task1"
 TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
 ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
 

@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import dask.dataframe as dd
 from glob import glob
-from dask.distributed import LocalCluster
+# from dask.distributed import LocalCluster, Client
+# from dask_jobqueue import SLURMCluster
+import dask
 import os
 from constants import RAW_DATA_ROOT, YEARS, TASK1_OUT_ROOT, TAXI_ZONES_SHAPEFILE, ZONES_TO_CENTROIDS_MAPPING_CSV, TASK1_SCHEMA, TASK1_NP_SCHEMA, COLUMN_CONSISTENCY_NAMING_MAP
 from tqdm import tqdm
@@ -13,7 +15,7 @@ def get_raw_files(root_path, year):
     """
     Get all original files in the given path for the specified year.
     """
-    return sorted(list(glob(f"{root_path}/yellow_tripdata_{year}*.parquet")))
+    return sorted(list(glob(f"{root_path}/yellow_tripdata_{year}*.parquet")))[-LIMIT:]
 
 def map_vendor(value):
     # vendor_id (previously vendor_name but stands for the same thing)
@@ -172,13 +174,24 @@ def write_hdf5_parallel_concat(dfs, hdf_filepath):
 
 
 if __name__ == "__main__":
-    # run the script
     # Local cluster
-    pd.set_option('future.no_silent_downcasting', True)
-
     cluster = LocalCluster()
     client = cluster.get_client()
     print(cluster.dashboard_link)
+
+    # # SLURM cluster
+    # cluster = SLURMCluster(
+    #     cores=4,
+    #     processes=1,
+    #     memory="100GB",
+    #     walltime="12:00:00",
+    #     death_timeout=600,
+    # )
+    # cluster.adapt(minimum=1, maximum=2)
+    # print(cluster.job_script())
+    # client = Client(cluster)
+
+    pd.set_option('future.no_silent_downcasting', True)
 
     print("Reading files...")
     files = sum((get_raw_files(RAW_DATA_ROOT, year) for year in YEARS), [])
@@ -249,6 +262,9 @@ if __name__ == "__main__":
     # We are saving files sequentially, since multiprocessing append doesn't really work that well in to_parquet or when writing to the same CSV file.
     # Furthermore, even if we do parallelize, the bottleneck is in disk I/O.
 
+    # Compute everything in parallel (persist)
+    # dfs = client.persist(dfs)
+
     print("Writing files...")
     # Create needed folders
     os.makedirs(os.path.join(TASK1_OUT_ROOT, "one_year"), exist_ok=True)
@@ -256,23 +272,23 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(TASK1_OUT_ROOT, "all"), exist_ok=True)
 
     # # Write parquet (all)
-    # parquet_root = os.path.join(TASK1_OUT_ROOT, "all")
-    # print(f"Writing Parquet (all) to {parquet_root}...")
-    # write_parquet_sequentially(dfs, parquet_root, partition_on=['year'], schema=TASK1_SCHEMA)
+    parquet_root = os.path.join(TASK1_OUT_ROOT, "all")
+    print(f"Writing Parquet (all) to {parquet_root}...")
+    write_parquet_sequentially(dfs, parquet_root, partition_on=['year'], schema=TASK1_SCHEMA)
 
-    # # CSV (5 years)
-    # csv_file = os.path.join(TASK1_OUT_ROOT, "five_years", "2020_2024.csv")
-    # print(f"Writing CSV (5 years) to {csv_file}...")
-    # write_csv_sequentially(dfs[-61:-1], csv_file)
+    # CSV (5 years)
+    csv_file = os.path.join(TASK1_OUT_ROOT, "five_years", "2020_2024.csv")
+    print(f"Writing CSV (5 years) to {csv_file}...")
+    write_csv_sequentially(dfs[-61:-1], csv_file)
     
     # CSV (1 year)
-    # as a proof of concept - we can concat in parallel, an then write to a single file, however this just uses a lot of memory and is not really needed.
-    # since the bottleneck is writing to disk not computation and then workers spend a lot of time just waiting.
     csv_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.csv")
     print(f"Writing CSV (1 year) to {csv_file}...")
-    write_csv_parallel_concat(dfs[-13:-1], csv_file) 
+    write_csv_sequentially(dfs[-13:-1], csv_file) 
 
     # HDF (1 year)
+    # as a proof of concept - we can concat in parallel, an then write to a single file, however this just uses a lot of memory and is not really needed.
+    # since the bottleneck is writing to disk not computation and then workers spend a lot of time just waiting.
     # using h5py as dask's implementation has problems (it can only save in the "tables" format resulting in a larger file than the equivalent CSV...)
     hdf_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.h5")
     print(f"Writing HDF5 (1 year) to {hdf_file}...")
