@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import dask.dataframe as dd
 from glob import glob
-# from dask.distributed import LocalCluster, Client
+from dask.distributed import LocalCluster, Client
 # from dask_jobqueue import SLURMCluster
 import dask
 import os
@@ -15,7 +15,7 @@ def get_raw_files(root_path, year):
     """
     Get all original files in the given path for the specified year.
     """
-    return sorted(list(glob(f"{root_path}/yellow_tripdata_{year}*.parquet")))[-LIMIT:]
+    return sorted(list(glob(f"{root_path}/yellow_tripdata_{year}*.parquet")))
 
 def map_vendor(value):
     # vendor_id (previously vendor_name but stands for the same thing)
