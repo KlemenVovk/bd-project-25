@@ -94,11 +94,17 @@ def get_locationid_to_centroid(shapefile):
     zones['centroid_lat'] = centroids_wgs84.geometry.y
     zones['centroid_lng'] = centroids_wgs84.geometry.x
 
-    zones = zones[['LocationID', 'centroid_lat', 'centroid_lng']]
+    zones = zones[['OBJECTID', 'centroid_lat', 'centroid_lng']]
     zones['centroid_lat'] = zones['centroid_lat'].astype(float)
     zones['centroid_lng'] = zones['centroid_lng'].astype(float)
-    zones['LocationID'] = zones['LocationID'].astype(int)
+    zones['OBJECTID'] = zones['OBJECTID'].astype(int)
 
+    # create a pandas dataframe with the same columns
+    # Apparently, there are duplicate LocationIDs that are mapped to unique Objectids so the matching later doesnt work.
+    # Have checked the taxi zone map and visually it is ok (some locationids are shown on the map, that aren't in the LocationID colmun, but are in the objectid column)
+    # I.e. ObjectID=56, and 57 are present but both are mapped to LocationID=56 so the join fails...
+    zones = pd.DataFrame(zones[['OBJECTID', 'centroid_lat', 'centroid_lng']].copy())
+    zones = zones.rename(columns={'OBJECTID': 'LocationID'})
     return zones
 
 def write_parquet_sequentially(dfs, root_dir, partition_on=None, schema=None):
@@ -137,7 +143,17 @@ def write_csv_sequentially(dfs, csv_file):
             compute=True
         )
 
-def write_hdf5_concat(dfs, hdf_filepath):
+def write_csv_parallel_concat(dfs, csv_file):
+    df_concat = dd.concat(dfs, axis=0)
+    df_concat.to_csv(
+        filename=csv_file,
+        single_file=True,
+        index=False,
+        mode="wt", # append/create if not exists
+        compute=True
+    )
+
+def write_hdf5_parallel_concat(dfs, hdf_filepath):
     df = dd.concat(dfs, axis=0)
     # convert datetimes to int64 (h5py can't handle datetimes directly)
     for col in df.select_dtypes(include=['datetime64[ns]']):
@@ -190,6 +206,7 @@ if __name__ == "__main__":
         if "PULocationID" in dfs[i].columns:
             # set dtype to int
             dfs[i]['PULocationID'] = dfs[i]['PULocationID'].astype(int)
+            # show any pulocationds that are not in the locationid_to_centers_df
             dfs[i] = dfs[i].merge(locationid_to_centers_df, how='left', left_on='PULocationID', right_on='LocationID')
             # rename to pickup lattitude and longitude
             dfs[i] = dfs[i].rename(columns={'centroid_lat': 'pickup_latitude', 'centroid_lng': 'pickup_longitude'})
@@ -225,10 +242,11 @@ if __name__ == "__main__":
         dfs[i]['passenger_count'] = dfs[i]['passenger_count'].fillna(0).astype(int)
         # Fix dtypes
         dfs[i] = dfs[i].astype(TASK1_NP_SCHEMA)
+        # print shape of each dataframe and the corresponding file
 
     # Save everything
+    # Up to here, everything is embarrasingly parallelizable (a `dask.compute(*dfs)` would work in parallel - tested).
     # We are saving files sequentially, since multiprocessing append doesn't really work that well in to_parquet or when writing to the same CSV file.
-    # Up to here, everything is embarrasingly parallelizable (a `dask.compute(*dfs)` would work).
     # Furthermore, even if we do parallelize, the bottleneck is in disk I/O.
 
     print("Writing files...")
@@ -237,23 +255,25 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(TASK1_OUT_ROOT, "five_years"), exist_ok=True)
     os.makedirs(os.path.join(TASK1_OUT_ROOT, "all"), exist_ok=True)
 
-    # Write parquet (all)
-    print("Writing Parquet (all)...")
-    parquet_root = os.path.join(TASK1_OUT_ROOT, "all")
-    write_parquet_sequentially(dfs, parquet_root, partition_on=['year'], schema=TASK1_SCHEMA)
+    # # Write parquet (all)
+    # parquet_root = os.path.join(TASK1_OUT_ROOT, "all")
+    # print(f"Writing Parquet (all) to {parquet_root}...")
+    # write_parquet_sequentially(dfs, parquet_root, partition_on=['year'], schema=TASK1_SCHEMA)
 
-    # CSV (5 years)
-    print("Writing CSV (5 years)...")
-    csv_file = os.path.join(TASK1_OUT_ROOT, "five_years", "2020_2024.csv")
-    write_csv_sequentially(dfs[-61:-1], csv_file)
+    # # CSV (5 years)
+    # csv_file = os.path.join(TASK1_OUT_ROOT, "five_years", "2020_2024.csv")
+    # print(f"Writing CSV (5 years) to {csv_file}...")
+    # write_csv_sequentially(dfs[-61:-1], csv_file)
     
     # CSV (1 year)
-    print("Writing CSV (1 year)...")
+    # as a proof of concept - we can concat in parallel, an then write to a single file, however this just uses a lot of memory and is not really needed.
+    # since the bottleneck is writing to disk not computation and then workers spend a lot of time just waiting.
     csv_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.csv")
-    write_csv_sequentially(dfs[-13:-1], csv_file)
+    print(f"Writing CSV (1 year) to {csv_file}...")
+    write_csv_parallel_concat(dfs[-13:-1], csv_file) 
 
     # HDF (1 year)
     # using h5py as dask's implementation has problems (it can only save in the "tables" format resulting in a larger file than the equivalent CSV...)
     hdf_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.h5")
     print(f"Writing HDF5 (1 year) to {hdf_file}...")
-    write_hdf5_concat(dfs[-13:-1], hdf_file)
+    write_hdf5_parallel_concat(dfs[-13:-1], hdf_file)
