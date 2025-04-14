@@ -105,6 +105,7 @@ colorama==0.4.6 ; sys_platform == 'win32' \
     # via
     #   click
     #   ipython
+    #   tqdm
 comm==0.2.2 \
     --hash=sha256:3fd7a84065306e07bea1773df6eb8282de51ba82f77c72f9c85716ab11fe980e \
     --hash=sha256:e6fb86cb70ff661ee8c9c14e7d36d6de3b4066f1441be4063df9c5009f0a64d3
@@ -149,7 +150,12 @@ dask==2025.3.0 \
     --hash=sha256:b5d72bb33788904a218fd7da1850238517592358ecc79c30bb5c188a71df506d
     # via
     #   bd-project-25
+    #   dask-jobqueue
     #   distributed
+dask-jobqueue==0.9.0 \
+    --hash=sha256:253dfc4f0b8722201a08e05b841859dfeea1f6698ff21eff0d9370e5aa8ae20f \
+    --hash=sha256:494ef64b7bb3848c7d72ed334c288030caca6a09dca54cfaa3f395f4ba7f5c47
+    # via bd-project-25
 debugpy==1.8.13 \
     --hash=sha256:2b8de94c5c78aa0d0ed79023eb27c7c56a64c68217d881bee2ffbcb13951d0c1 \
     --hash=sha256:31abc9618be4edad0b3e3a85277bc9ab51a2d9f708ead0d99ffb5bb750e18503 \
@@ -169,7 +175,9 @@ decorator==5.2.1 \
 distributed==2025.3.0 \
     --hash=sha256:84a68c91db2a106c752ca7845fba8cd92ad4f3545c0fb2d9b6dec0f44b225539 \
     --hash=sha256:ebdacd181873b39bc30185857a5a856f051efaaf42ef2a8f507708857acdc6a9
-    # via dask
+    # via
+    #   dask
+    #   dask-jobqueue
 executing==2.2.0 \
     --hash=sha256:11387150cad388d62750327a53d3339fad4888b39a6fe233c3afbb54ecffd3aa \
     --hash=sha256:5d108c028108fe2551d1a7b2e8b713341e2cb4fc0aa7dcf966fa4327a5226755
@@ -769,6 +777,10 @@ tornado==6.4.2 \
     #   distributed
     #   ipykernel
     #   jupyter-client
+tqdm==4.67.1 \
+    --hash=sha256:26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2 \
+    --hash=sha256:f8aef9c52c08c13a65f30ea34f4e5aac3fd1a34959879d7e59e63027286627f2
+    # via bd-project-25
 traitlets==5.14.3 \
     --hash=sha256:9ed0579d3502c94b4b3732ac120375cda96f923114522847de4b3bb98b96b6b7 \
     --hash=sha256:b74e89e397b1ed28cc831db7aea759ba6640cb3de13090ca145426688ff1ac4f
