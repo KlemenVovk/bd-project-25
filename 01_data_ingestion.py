@@ -138,16 +138,18 @@ def write_parquet_sequentially(dfs, root_dir, partition_on=None, schema=None):
 def write_csv_sequentially(dfs, csv_file):
     for i in tqdm(range(len(dfs))):
         dfs[i].to_csv(
+            header=(i == 0), # write header only for the first file
             filename=csv_file,
             single_file=True,
             index=False,
-            mode="at", # append/create if not exists
+            mode="wt" if i == 0 else "a", # append/create if not exists
             compute=True
         )
 
 def write_csv_parallel_concat(dfs, csv_file):
     df_concat = dd.concat(dfs, axis=0)
     df_concat.to_csv(
+        header=True,
         filename=csv_file,
         single_file=True,
         index=False,
@@ -271,25 +273,25 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(TASK1_OUT_ROOT, "five_years"), exist_ok=True)
     os.makedirs(os.path.join(TASK1_OUT_ROOT, "all"), exist_ok=True)
 
-    # # Write parquet (all)
-    parquet_root = os.path.join(TASK1_OUT_ROOT, "all")
-    print(f"Writing Parquet (all) to {parquet_root}...")
-    write_parquet_sequentially(dfs, parquet_root, partition_on=['year'], schema=TASK1_SCHEMA)
+    # # # Write parquet (all)
+    # parquet_root = os.path.join(TASK1_OUT_ROOT, "all")
+    # print(f"Writing Parquet (all) to {parquet_root}...")
+    # write_parquet_sequentially(dfs, parquet_root, partition_on=['year'], schema=TASK1_SCHEMA)
 
-    # CSV (5 years)
+    # # CSV (5 years)
     csv_file = os.path.join(TASK1_OUT_ROOT, "five_years", "2020_2024.csv")
     print(f"Writing CSV (5 years) to {csv_file}...")
     write_csv_sequentially(dfs[-61:-1], csv_file)
     
     # CSV (1 year)
-    csv_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.csv")
-    print(f"Writing CSV (1 year) to {csv_file}...")
-    write_csv_sequentially(dfs[-13:-1], csv_file) 
+    # csv_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.csv")
+    # print(f"Writing CSV (1 year) to {csv_file}...")
+    # write_csv_sequentially(dfs[-13:-1], csv_file) 
 
-    # HDF (1 year)
-    # as a proof of concept - we can concat in parallel, an then write to a single file, however this just uses a lot of memory and is not really needed.
-    # since the bottleneck is writing to disk not computation and then workers spend a lot of time just waiting.
-    # using h5py as dask's implementation has problems (it can only save in the "tables" format resulting in a larger file than the equivalent CSV...)
-    hdf_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.h5")
-    print(f"Writing HDF5 (1 year) to {hdf_file}...")
-    write_hdf5_parallel_concat(dfs[-13:-1], hdf_file)
+    # # HDF (1 year)
+    # # as a proof of concept - we can concat in parallel, an then write to a single file, however this just uses a lot of memory and is not really needed.
+    # # since the bottleneck is writing to disk not computation and then workers spend a lot of time just waiting.
+    # # using h5py as dask's implementation has problems (it can only save in the "tables" format resulting in a larger file than the equivalent CSV...)
+    # hdf_file = os.path.join(TASK1_OUT_ROOT, "one_year", "2024.h5")
+    # print(f"Writing HDF5 (1 year) to {hdf_file}...")
+    # write_hdf5_parallel_concat(dfs[-13:-1], hdf_file)
