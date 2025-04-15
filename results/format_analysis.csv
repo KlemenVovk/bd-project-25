@@ -1,0 +1,5 @@
+id,format,n_rows,n_cols,mem_usage_GB,mean_read_time,std_read_time,size_on_disk_GB
+original_1year,parquet,41169720,19,5.714,2.61,0.06,0.645
+processed_1year,parquet,41169720,22,3.297,2.52,0.06,0.895
+processed_1year,csv,41169720,22,3.336,88.57,1.1,5.305
+processed_1year,h5,41169720,22,3.336,16.02,0.19,1.014
