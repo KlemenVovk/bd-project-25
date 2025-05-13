@@ -25,6 +25,10 @@ bokeh==3.7.2 \
     --hash=sha256:80c21885cec276431acd4db92f831c71eb999ea995470ce777e0c577b0cfc1d8 \
     --hash=sha256:efd9172a90cc233c1c21ef4813d58a8a6f97ee63c8e2f1b4f2389a64fcef0722
     # via dask
+branca==0.8.1 \
+    --hash=sha256:ac397c2d79bd13af0d04193b26d5ed17031d27609a7f1fab50c438b8ae712390 \
+    --hash=sha256:d29c5fab31f7c21a92e34bf3f854234e29fecdcf5d2df306b616f20d816be425
+    # via folium
 certifi==2025.1.31 \
     --hash=sha256:3d5da6925056f6f18f119200434a4780a94263f10d1c21d032a6f6b2baa20651 \
     --hash=sha256:ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe
@@ -184,10 +188,33 @@ distributed==2025.3.0 \
     # via
     #   dask
     #   dask-jobqueue
+duckdb==1.2.2 \
+    --hash=sha256:087713fc5958cae5eb59097856b3deaae0def021660c8f2052ec83fa8345174a \
+    --hash=sha256:1e53555dece49201df08645dbfa4510c86440339889667702f936b7d28d39e43 \
+    --hash=sha256:26e9c349f56f7c99341b5c79bbaff5ba12a5414af0261e79bf1a6a2693f152f6 \
+    --hash=sha256:2bd2c6373b8b54474724c2119f6939c4568c428e1d0be5bcb1f4e3d7f1b7c8bb \
+    --hash=sha256:30bece4f58a6c7bb0944a02dd1dc6de435a9daf8668fa31a9fe3a9923b20bd65 \
+    --hash=sha256:6aba3bc0acf4f8d52b94f7746c3b0007b78b517676d482dc516d63f48f967baf \
+    --hash=sha256:72f688a8b0df7030c5a28ca6072817c1f090979e08d28ee5912dee37c26a7d0c \
+    --hash=sha256:73263f81545c5cb4360fbaf7b22a493e55ddf88fadbe639c43efb7bc8d7554c4 \
+    --hash=sha256:88916d7f0532dc926bed84b50408c00dcbe6d2097d0de93c3ff647d8d57b4f83 \
+    --hash=sha256:a1f96395319c447a31b9477881bd84b4cb8323d6f86f21ceaef355d22dd90623 \
+    --hash=sha256:b1c0c4d737fd2ab9681e4e78b9f361e0a827916a730e84fa91e76dca451b14d5 \
+    --hash=sha256:d625cc7d2faacfb2fc83ebbe001ae75dda175b3d8dce6a51a71c199ffac3627a \
+    --hash=sha256:d8bb89e580cb9a3aaf42e4555bf265d3db9446abfb118e32150e1a5dfa4b5b15 \
+    --hash=sha256:e1aec7102670e59d83512cf47d32a6c77a79df9df0294c5e4d16b6259851e2e9 \
+    --hash=sha256:e5c1556775a9ebaa49b5c8d64718f155ac3e05b34a49e9c99443cf105e8b0371 \
+    --hash=sha256:f745379f44ad302560688855baaed9739c03b37a331338eda6a4ac655e4eb42f \
+    --hash=sha256:fb9a2c77236fae079185a990434cb9d8432902488ba990235c702fc2692d2dcd
+    # via bd-project-25
 executing==2.2.0 \
     --hash=sha256:11387150cad388d62750327a53d3339fad4888b39a6fe233c3afbb54ecffd3aa \
     --hash=sha256:5d108c028108fe2551d1a7b2e8b713341e2cb4fc0aa7dcf966fa4327a5226755
     # via stack-data
+folium==0.19.5 \
+    --hash=sha256:103ef92d7738b91972f4531211f76eee3f38c88be03111bbd6a5e65c69d084df \
+    --hash=sha256:4333fb3e6f3e9eedb231615d22c6d7df20aea5829554bd6908675865a37803b3
+    # via bd-project-25
 fonttools==4.58.0 \
     --hash=sha256:107bdb2dacb1f627db3c4b77fb16d065a10fe88978d02b4fc327b9ecf8a62060 \
     --hash=sha256:27423d0606a2c7b336913254bf0b1193ebd471d5f725d665e875c5e88a011a43 \
@@ -260,8 +287,10 @@ jinja2==3.1.6 \
     --hash=sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
     # via
     #   bokeh
+    #   branca
     #   dask
     #   distributed
+    #   folium
 jupyter-client==8.6.3 \
     --hash=sha256:35b3a0947c4a6e9d589eb97d7d4cd5e90f910ee73101611f01283732bd6d9419 \
     --hash=sha256:e8a19cc986cc45905ac3362915f410f3af85424b4c0905e94fa5f2cb08e8f23f
@@ -519,6 +548,7 @@ numpy==2.2.4 \
     #   bokeh
     #   contourpy
     #   dask
+    #   folium
     #   geopandas
     #   h5py
     #   matplotlib
@@ -802,7 +832,9 @@ pyzmq==26.4.0 \
 requests==2.32.3 \
     --hash=sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760 \
     --hash=sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6
-    # via blosc2
+    # via
+    #   blosc2
+    #   folium
 seaborn==0.13.2 \
     --hash=sha256:636f8336facf092165e27924f223d3c62ca560b1f2bb5dff7ab7fad265361987 \
     --hash=sha256:93e60a40988f4d65e9f4885df477e2fdaff6b73a9ded434c1ab356dd57eefff7
@@ -927,7 +959,9 @@ widgetsnbextension==4.0.13 \
 xyzservices==2025.1.0 \
     --hash=sha256:5cdbb0907c20be1be066c6e2dc69c645842d1113a4e83e642065604a21f254ba \
     --hash=sha256:fa599956c5ab32dad1689960b3bb08fdcdbe0252cc82d84fc60ae415dc648907
-    # via bokeh
+    # via
+    #   bokeh
+    #   folium
 zict==3.0.0 \
     --hash=sha256:5796e36bd0e0cc8cf0fbc1ace6a68912611c1dbd74750a3f3026b9b9d6a327ae \
     --hash=sha256:e321e263b6a97aafc0790c3cfb3c04656b7066e6738c37fffcca95d803c9fba5

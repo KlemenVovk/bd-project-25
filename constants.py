@@ -3,6 +3,7 @@ import numpy as np
 
 RAW_DATA_ROOT = "data/raw"
 CLEAN_PARQUET_DATA_ROOT = "data/clean"
+DUCKDB_CLEAN_DATABASE = "data/duckdb/nyc_database.duckdb"
 RESULTS_ROOT = "results"
 # RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
 YEARS = [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
@@ -89,3 +90,18 @@ COLUMN_CONSISTENCY_NAMING_MAP = {
     "surcharge": "extra",
     "store_and_forward": "store_and_fwd_flag",
 }
+
+NYC_MOST_WEST_LONGITUDE = -74.248064
+NYC_MOST_EAST_LONGITUDE = -73.708116
+NYC_MOST_NORTH_LATITUDE = 40.908582
+NYC_MOST_SOUTH_LATITUDE = 40.505232
+
+MAX_SPEED = 80 # mph
+REASONABLE_PRICE_MIN = 2.5 # initial charge
+REASONABLE_PRICE_MAX = 500
+REASONABLE_MIN_TRIP_DURATION = 1 # in minutes
+REASONABLE_MAX_TRIP_DURATION = 6 * 60 # in minutes
+REASONABLE_MIN_YEAR = 2008 # first year of NYC taxi data -1 (trips with pickup on 2008-12-31)
+REASONABLE_MAX_YEAR = 2025 # last year of NYC taxi data
+
+
