@@ -1,0 +1,223 @@
+{
+    "2009": {
+        "total_rides": 170896055,
+        "avg_price_breakdown": {
+            "fare_amount": 9.90515475620546,
+            "extra": 0.21249562489900659,
+            "mta_tax": 0.07831967800544021,
+            "tip_amount": 0.5733783380780791,
+            "tolls_amount": 0.15316270466278464,
+            "improvement_surcharge": 0.0,
+            "congestion_surcharge": 0.0,
+            "airport_fee": 0.0
+        }
+    },
+    "2010": {
+        "total_rides": 169001162,
+        "avg_price_breakdown": {
+            "fare_amount": 9.84457893845724,
+            "extra": 0.3221659268827986,
+            "mta_tax": 0.4955940362114197,
+            "tip_amount": 0.7605344157337806,
+            "tolls_amount": -0.07495007637876477,
+            "improvement_surcharge": 0.0,
+            "congestion_surcharge": 0.0,
+            "airport_fee": 0.0
+        }
+    },
+    "2011": {
+        "total_rides": 176887259,
+        "avg_price_breakdown": {
+            "fare_amount": 10.245292794095475,
+            "extra": 0.320818335480002,
+            "mta_tax": 0.4985175783632896,
+            "tip_amount": 0.959665003345436,
+            "tolls_amount": 0.20106078979945075,
+            "improvement_surcharge": 5.0879867823763775e-09,
+            "congestion_surcharge": 1.413329605610543e-08,
+            "airport_fee": 0.0
+        }
+    },
+    "2012": {
+        "total_rides": 171359007,
+        "avg_price_breakdown": {
+            "fare_amount": 10.989767511899739,
+            "extra": 0.3191024560500634,
+            "mta_tax": 0.4983618515016255,
+            "tip_amount": 1.124347505118304,
+            "tolls_amount": 0.21261103596381134,
+            "improvement_surcharge": 4.7269183705468873e-08,
+            "congestion_surcharge": 2.9178507086003364e-07,
+            "airport_fee": 0.0
+        }
+    },
+    "2013": {
+        "total_rides": 171816340,
+        "avg_price_breakdown": {
+            "fare_amount": 12.34860451572883,
+            "extra": 0.31912582935941947,
+            "mta_tax": 0.49820788872583366,
+            "tip_amount": 1.3654158387962403,
+            "tolls_amount": 0.24983360721104872,
+            "improvement_surcharge": 8.7302523147682e-09,
+            "congestion_surcharge": 2.910084104922733e-08,
+            "airport_fee": 0.0
+        }
+    },
+    "2014": {
+        "total_rides": 165447579,
+        "avg_price_breakdown": {
+            "fare_amount": 12.650250651295417,
+            "extra": 0.3171207963097484,
+            "mta_tax": 0.4978981771622056,
+            "tip_amount": 1.5118352865109015,
+            "tolls_amount": 0.27860314595476793,
+            "improvement_surcharge": 4.7326170334446424e-07,
+            "congestion_surcharge": 1.5110526337771312e-08,
+            "airport_fee": 0.0
+        }
+    },
+    "2015": {
+        "total_rides": 146039231,
+        "avg_price_breakdown": {
+            "fare_amount": 12.939025788214401,
+            "extra": 0.31425301054892574,
+            "mta_tax": 0.4976083720955775,
+            "tip_amount": 1.7291409593905627,
+            "tolls_amount": 0.3077635762132985,
+            "improvement_surcharge": 0.29832789245514446,
+            "congestion_surcharge": 0.0,
+            "airport_fee": 0.0
+        }
+    },
+    "2016": {
+        "total_rides": 131131805,
+        "avg_price_breakdown": {
+            "fare_amount": 13.132373248427413,
+            "extra": 0.3312825595590635,
+            "mta_tax": 0.4973911554103903,
+            "tip_amount": 1.799887738905142,
+            "tolls_amount": 0.3173128288747341,
+            "improvement_surcharge": 0.2996883021628506,
+            "congestion_surcharge": 0.0,
+            "airport_fee": 0.0
+        }
+    },
+    "2017": {
+        "total_rides": 113500327,
+        "avg_price_breakdown": {
+            "fare_amount": 13.047937315634341,
+            "extra": 0.3312384113219339,
+            "mta_tax": 0.4972913249844646,
+            "tip_amount": 1.8373003630200995,
+            "tolls_amount": 0.325228102646788,
+            "improvement_surcharge": 0.29962088126847425,
+            "congestion_surcharge": 0.0,
+            "airport_fee": 0.0
+        }
+    },
+    "2018": {
+        "total_rides": 102871387,
+        "avg_price_breakdown": {
+            "fare_amount": 13.07711968537957,
+            "extra": 0.33213009949987354,
+            "mta_tax": 0.49710720824635135,
+            "tip_amount": 1.8737599795363895,
+            "tolls_amount": 0.3476801960490724,
+            "improvement_surcharge": 0.299587639466745,
+            "congestion_surcharge": 8.019722724259565e-07,
+            "airport_fee": 0.0
+        }
+    },
+    "2019": {
+        "total_rides": 84598444,
+        "avg_price_breakdown": {
+            "fare_amount": 13.41264347604313,
+            "extra": 1.0902647807564876,
+            "mta_tax": 0.4942544806143243,
+            "tip_amount": 2.1900799972160243,
+            "tolls_amount": 0.3868693376913646,
+            "improvement_surcharge": 0.29860660321364774,
+            "congestion_surcharge": 2.0574627117255253,
+            "airport_fee": 0.0
+        }
+    },
+    "2020": {
+        "total_rides": 24649092,
+        "avg_price_breakdown": {
+            "fare_amount": 12.66778281325738,
+            "extra": 1.071846378763161,
+            "mta_tax": 0.512796657986428,
+            "tip_amount": 2.0820265509171696,
+            "tolls_amount": 0.3038692865441047,
+            "improvement_surcharge": 0.29755562598411334,
+            "congestion_surcharge": 2.1965377061353824,
+            "airport_fee": 0.0
+        }
+    },
+    "2021": {
+        "total_rides": 30904308,
+        "avg_price_breakdown": {
+            "fare_amount": 13.51933096188402,
+            "extra": 1.0477438291127568,
+            "mta_tax": 0.4922739574042557,
+            "tip_amount": 2.341164086249723,
+            "tolls_amount": 0.3908617206377829,
+            "improvement_surcharge": 0.29716863422406997,
+            "congestion_surcharge": 2.1795710811580054,
+            "airport_fee": 0.058678955050538585
+        }
+    },
+    "2022": {
+        "total_rides": 39656098,
+        "avg_price_breakdown": {
+            "fare_amount": 10.362820467106976,
+            "extra": 1.0075326120083725,
+            "mta_tax": 0.48880618562118744,
+            "tip_amount": 7.234908890935261,
+            "tolls_amount": 0.5362829192120717,
+            "improvement_surcharge": 0.31612429442755563,
+            "congestion_surcharge": 2.2027163640759615,
+            "airport_fee": 0.09405799330029899
+        }
+    },
+    "2023": {
+        "total_rides": 38310226,
+        "avg_price_breakdown": {
+            "fare_amount": 19.522250377745095,
+            "extra": 1.5560563907923697,
+            "mta_tax": 0.4856161381037011,
+            "tip_amount": 3.522265412895241,
+            "tolls_amount": 0.5897362234302663,
+            "improvement_surcharge": 0.9794494034047202,
+            "congestion_surcharge": 2.1872121558353634,
+            "airport_fee": 0.13527944209987172
+        }
+    },
+    "2024": {
+        "total_rides": 41169720,
+        "avg_price_breakdown": {
+            "fare_amount": 19.26850083022182,
+            "extra": 1.38595297709093,
+            "mta_tax": 0.47977737035860335,
+            "tip_amount": 3.307884726930375,
+            "tolls_amount": 0.561526724009782,
+            "improvement_surcharge": 0.9629935787758576,
+            "congestion_surcharge": 2.010324675513946,
+            "airport_fee": 0.13239728130286046
+        }
+    },
+    "2025": {
+        "total_rides": 3475226,
+        "avg_price_breakdown": {
+            "fare_amount": 17.08180244968241,
+            "extra": 1.317736458003019,
+            "mta_tax": 0.4780990502488183,
+            "tip_amount": 2.9598132610656114,
+            "tolls_amount": 0.44930804500196536,
+            "improvement_surcharge": 0.9547943788403978,
+            "congestion_surcharge": 1.8793720178198483,
+            "airport_fee": 0.10465175502255106
+        }
+    }
+}
