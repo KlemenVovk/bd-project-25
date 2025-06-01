@@ -3,6 +3,8 @@ from tqdm import tqdm
 import numpy as np
 import h5py
 import os
+import pandas as pd
+import geopandas as gpd
 
 def write_parquet_sequentially(dfs, root_dir, partition_on=None, schema=None, row_group_size=None):
     
@@ -85,3 +87,33 @@ def write_hdf5_parallel_concat(dfs, hdf_filepath):
 
 def get_total_size_GB(paths):
     return round(sum(os.path.getsize(p) for p in paths) / (1024 * 1024 * 1024), 3)
+
+def get_locationid_to_centroid(shapefile):
+    # Load zones as GeoDataFrame
+    zones = gpd.read_file(shapefile)
+
+    # Reproject to NYC's local projected CRS (US feet) for correct geometry math
+    zones_projected = zones.to_crs("EPSG:2263")
+
+    # Calculate centroid in projected space
+    zones_projected['centroid'] = zones_projected.geometry.centroid
+
+    # Convert centroid back to WGS84 (lat/lon)
+    centroids_wgs84 = zones_projected.set_geometry('centroid').to_crs("EPSG:4326")
+
+    # Extract lat/lng from centroid geometry
+    zones['centroid_lat'] = centroids_wgs84.geometry.y
+    zones['centroid_lng'] = centroids_wgs84.geometry.x
+
+    zones = zones[['OBJECTID', 'centroid_lat', 'centroid_lng']]
+    zones['centroid_lat'] = zones['centroid_lat'].astype(float)
+    zones['centroid_lng'] = zones['centroid_lng'].astype(float)
+    zones['OBJECTID'] = zones['OBJECTID'].astype(int)
+
+    # create a pandas dataframe with the same columns
+    # Apparently, there are duplicate LocationIDs that are mapped to unique Objectids so the matching later doesnt work.
+    # Have checked the taxi zone map and visually it is ok (some locationids are shown on the map, that aren't in the LocationID colmun, but are in the objectid column)
+    # I.e. ObjectID=56, and 57 are present but both are mapped to LocationID=56 so the join fails...
+    zones = pd.DataFrame(zones[['OBJECTID', 'centroid_lat', 'centroid_lng']].copy())
+    zones = zones.rename(columns={'OBJECTID': 'LocationID'})
+    return zones
