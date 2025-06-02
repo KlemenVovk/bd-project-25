@@ -15,10 +15,13 @@ class TaxiRecord(faust.Record, serializer='json'):
 
 # Schema for outgoing messages
 class StatsRecord(faust.Record, serializer='json'):
+    borough: str
     mean_fare: float
     std_fare: float
     mean_psg: float
     std_psg: float
+    mean_dist: float
+    std_dist: float
     count: int
 
 
@@ -34,7 +37,9 @@ stats_table = app.Table(
     default=lambda: {
         'count': 0,
         'total_amounts': [],
-        'passengers': []
+        'passengers': [],
+        'trip_distance': []
+        
     },
     partitions=1,
     changelog_topic=app.topic('custom_stats_changelog', partitions=1)
@@ -52,9 +57,10 @@ async def process(taxis):
         stats['count'] += 1
         stats['total_amounts'].append(taxi.total_amount or 0)
         stats['passengers'].append(taxi.passenger_count or 0)
+        stats['trip_distance'].append(taxi.trip_distance or 0)
 
         # Maintain a rolling window of last 100 values
-        for key in ['total_amounts', 'passengers']:
+        for key in ['total_amounts', 'passengers', 'trip_distance']:
             if len(stats[key]) > 100:
                 stats[key].pop(0)
                 
@@ -65,19 +71,25 @@ async def process(taxis):
             std_fare = stdev(stats['total_amounts'])
             mean_psg = mean(stats['passengers'])
             std_psg = stdev(stats['passengers'])
+            mean_dist = mean(stats['trip_distance'])
+            std_dist = stdev(stats['trip_distance'])
             count = stats['count']
             
             print(f"{borough} Count={stats['count']}")
             print(f"  💰 Mean Fare: {mean_fare:.2f}, Std: {std_fare:.2f}")
             print(f"  👥 Mean Passengers: {mean_psg:.2f}, Std: {std_psg:.2f}")
+            print(f"  📏 Mean Distance: {mean_dist:.2f}, Std: {std_dist:.2f}")
 
                 
             stats_msg = StatsRecord(
+                borough=borough,
                 mean_fare=mean_fare,
                 std_fare=std_fare,
                 mean_psg=mean_psg,
                 std_psg=std_psg,
-                count=count
+                count=count,
+                mean_dist=mean_dist,
+                std_dist=std_dist
             )
     
             await stats_topic.send(value=stats_msg)

@@ -15,7 +15,13 @@ class TaxiRecord(faust.Record, serializer='json'):
     total_amount: Optional[float]
     passenger_count: Optional[int]
 
+class ClusterCentroid(faust.Record, serializer='json'):
+    cluster_id: int
+    lng: float
+    lat: float
+
 taxi_topic = app.topic('yellow_taxi_stream', value_type=TaxiRecord)
+cluster_topic = app.topic('yellow_taxi_cluster_stream', value_type=ClusterCentroid)
 
 # Number of clusters
 K = 3
@@ -68,5 +74,13 @@ async def process(taxis):
         centroids[closest_id] = {'lat': new_lat, 'lon': new_lon, 'count': new_count}
         print(float(taxi.pickup_longitude), float(taxi.pickup_latitude))
         print(f"Cluster {closest_id}: Lat {new_lat:.5f}, Lon {new_lon:.5f}, Count {new_count}")
+
+        cluster_msg = ClusterCentroid(
+            cluster_id=closest_id,
+            lng=new_lon,
+            lat=new_lat
+        )
+        await cluster_topic.send(value=cluster_msg)
+        
 
 
