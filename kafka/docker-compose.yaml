@@ -87,7 +87,7 @@ services:
       - ./jupyter:/workspace
     working_dir: /workspace
     command: >
-      bash -c "pip install jupyterlab pandas scikit-learn pyarrow faust confluent-kafka plotly &&
+      bash -c "pip install jupyterlab pandas scikit-learn pyarrow faust confluent-kafka plotly bytewax &&
                jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --NotebookApp.token=''"
     depends_on:
       - broker1-kr
