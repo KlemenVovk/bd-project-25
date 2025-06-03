@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  broker1-kr:
+    image: confluentinc/cp-kafka:latest
+    platform: linux/amd64
+    container_name: broker1-kr
+    hostname: broker1-kr
+    ports:
+      - "10000:10000"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker1-kr:9092,CONTROLLER://broker1-kr:9093,EXTERNAL://0.0.0.0:10000'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker1-kr:9092,EXTERNAL://localhost:10000'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker1-kr:9093,2@broker2-kr:9093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      CLUSTER_ID: 'ooD-U0V_Qk2dpdCket67jw'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_LOG_DIRS: '/var/lib/kafka/data'
+      KAFKA_LOG_RETENTION_MS: '10000'
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 2000
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+    volumes:
+      - kafka1-kr-data:/var/lib/kafka/data
+
+  broker2-kr:
+    image: confluentinc/cp-kafka:latest
+    platform: linux/amd64
+    container_name: broker2-kr
+    hostname: broker2-kr
+    ports:
+      - "10001:10001"
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker2-kr:9092,CONTROLLER://broker2-kr:9093,EXTERNAL://0.0.0.0:10001'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker2-kr:9092,EXTERNAL://localhost:10001'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker1-kr:9093,2@broker2-kr:9093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      CLUSTER_ID: 'ooD-U0V_Qk2dpdCket67jw'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 2
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_LOG_DIRS: '/var/lib/kafka/data'
+      KAFKA_LOG_RETENTION_MS: '10000'
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 2000
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+    volumes:
+      - kafka2-kr-data:/var/lib/kafka/data
+
+  ksqldb-server-kr:
+    image: confluentinc/cp-ksqldb-server:latest
+    platform: linux/amd64
+    container_name: ksqldb-server-kr
+    hostname: ksqldb-server-kr
+    depends_on:
+      - broker1-kr
+      - broker2-kr
+    ports:
+      - "10002:8088"
+    environment:
+      KSQL_LISTENERS: 'http://0.0.0.0:8088'
+      KSQL_BOOTSTRAP_SERVERS: 'broker1-kr:9092,broker2-kr:9092'
+      KSQL_KSQL_SERVICE_ID: 'ksqldb-service-kr_'
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
+      KSQL_KSQL_STREAMS_REPLICATION_FACTOR: 2
+      KSQL_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+
+  jupyter:
+    image: python:3.9-slim
+    container_name: jupyter-kafka
+    platform: linux/amd64
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./jupyter:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "pip install jupyterlab pandas scikit-learn pyarrow faust confluent-kafka plotly bytewax &&
+               jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --NotebookApp.token=''"
+    depends_on:
+      - broker1-kr
+      - broker2-kr
+
+volumes:
+  kafka1-kr-data:
+  kafka2-kr-data:

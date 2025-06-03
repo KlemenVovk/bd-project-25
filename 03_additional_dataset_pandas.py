@@ -50,7 +50,6 @@ def load_weather_data(PATH):
     return weather
 
 
-
 # Schools
 
 SCHOOLS_PATH = 'data/schools.csv'
