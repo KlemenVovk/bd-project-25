@@ -3,7 +3,7 @@ import pandas as pd
 import dask.dataframe as dd
 from glob import glob
 import os
-from constants import RAW_DATA_ROOT, TASK1_OUT_ROOT, TASK1_FHVHV_SCHEMA, COLUMN_CONSISTENCY_NAMING_MAP, LOCATIONID_CENTROID_BOROUGH_CSV
+from utils.constants import RAW_DATA_ROOT, TASK1_OUT_ROOT, TASK1_FHVHV_SCHEMA, COLUMN_CONSISTENCY_NAMING_MAP, LOCATIONID_CENTROID_BOROUGH_CSV
 from tqdm import tqdm
 
 
