@@ -9,7 +9,7 @@ RESULTS_ROOT = "results"
 TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"
 
 # TASK 1
-TASK1_OUT_ROOT = "data/task1"
+TASK1_OUT_ROOT = "data/T1"
 # TASK1_OUT_ROOT = "/d/hpc/projects/FRI/kv4582/bd25/task1"
 TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
 ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
