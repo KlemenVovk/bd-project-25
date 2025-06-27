@@ -2,8 +2,6 @@ import pyarrow as pa
 import numpy as np
 
 RAW_DATA_ROOT = "data/raw"
-CLEAN_PARQUET_DATA_ROOT = "data/clean"
-DUCKDB_CLEAN_DATABASE = "data/duckdb/nyc_database.duckdb"
 RESULTS_ROOT = "results"
 # RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
 TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"

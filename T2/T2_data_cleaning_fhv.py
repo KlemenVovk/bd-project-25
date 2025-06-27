@@ -1,4 +1,4 @@
-from utils.constants import TASK1_OUT_ROOT, TASK2_OUT_ROOT, TASK1_FHV_SCHEMA
+from utils.constants import TASK1_OUT_ROOT, TASK2_OUT_ROOT, TASK1_FHV_SCHEMA, RESULTS_ROOT
 import dask.dataframe as dd
 import numpy as np
 import os
@@ -53,8 +53,8 @@ final_stats_ddf = combined_stats_ddf.groupby("year").sum()
 final_stats = final_stats_ddf.compute().reset_index().sort_values("year")
 
 # Save stats to CSV
-os.makedirs(os.path.join(TASK2_OUT_ROOT), exist_ok=True)
-final_stats.to_csv(os.path.join(TASK2_OUT_ROOT, "fhv_tripdata_quality_stats.csv"), index=False)
+os.makedirs(os.path.join(RESULTS_ROOT), exist_ok=True)
+final_stats.to_csv(os.path.join(RESULTS_ROOT, "fhv_tripdata_quality_stats.csv"), index=False)
 
 # Save cleaned parquet files
 print("Saving cleaned data...")
