@@ -1,9 +1,4 @@
-from utils.constants import (
-    TASK1_OUT_ROOT, TASK2_OUT_ROOT,
-    TASK1_FHV_SCHEMA,
-    NYC_MOST_EAST_LONGITUDE, NYC_MOST_WEST_LONGITUDE,
-    NYC_MOST_NORTH_LATITUDE, NYC_MOST_SOUTH_LATITUDE
-)
+from utils.constants import TASK1_OUT_ROOT, TASK2_OUT_ROOT, TASK1_FHV_SCHEMA
 import dask.dataframe as dd
 import numpy as np
 import os
@@ -25,33 +20,17 @@ for i in tqdm(range(len(dfs))):
     df['year'] = df['pickup_datetime'].dt.year.astype(np.int16)
 
     # Timestamp cleaning
-    pickup_before_dropoff = df['pickup_datetime'] < df['dropoff_datetime']
-    delta_years = df['dropoff_datetime'].dt.year - df['pickup_datetime'].dt.year
-    same_year = delta_years == 0
-    dropoff_next_year = (
-        (delta_years == 1) &
-        (df['dropoff_datetime'].dt.month == 1) & (df['dropoff_datetime'].dt.day == 1) &
-        (df['pickup_datetime'].dt.month == 12) & (df['pickup_datetime'].dt.day == 31)
-    )
-    reasonable_year = df['year'].between(REASONABLE_MIN_YEAR, REASONABLE_MAX_YEAR, inclusive='both')
-    correct_datetimes = pickup_before_dropoff & (same_year | dropoff_next_year) & reasonable_year
-
-    # Coordinate bounds
-    latitudes_not_nan = df['pickup_latitude'].notnull() & df['dropoff_latitude'].notnull()
-    longitudes_not_nan = df['pickup_longitude'].notnull() & df['dropoff_longitude'].notnull()
-    latitudes_within_bounds = df['pickup_latitude'].between(NYC_MOST_SOUTH_LATITUDE, NYC_MOST_NORTH_LATITUDE) & df['dropoff_latitude'].between(NYC_MOST_SOUTH_LATITUDE, NYC_MOST_NORTH_LATITUDE)
-    longitudes_within_bounds = df['pickup_longitude'].between(NYC_MOST_WEST_LONGITUDE, NYC_MOST_EAST_LONGITUDE) & df['dropoff_longitude'].between(NYC_MOST_WEST_LONGITUDE, NYC_MOST_EAST_LONGITUDE)
-    coordinates_reasonable = latitudes_not_nan & longitudes_not_nan & latitudes_within_bounds & longitudes_within_bounds
+    valid_pickup = df['pickup_datetime'].notnull()
+    reasonable_year = df['pickup_datetime'].dt.year.between(2014, 2025)
+    valid_time = valid_pickup & reasonable_year
 
     # Boolean issue flags
-    bad_timestamps = ~correct_datetimes
-    bad_coordinates = ~coordinates_reasonable
-    clean = ~(bad_timestamps | bad_coordinates)
+    bad_timestamps = ~valid_time
+    clean = valid_time
 
     # Attach issue flags to minimal frame
     df_year = df[['year']].copy()
     df_year['bad_timestamps'] = bad_timestamps
-    df_year['bad_coordinates'] = bad_coordinates
     df_year['clean'] = clean
 
     # Dask-native grouped stats (lazy)
@@ -59,13 +38,12 @@ for i in tqdm(range(len(dfs))):
         df_year.groupby("year").agg(
             total_trips=("year", "count"),
             bad_timestamps=("bad_timestamps", "sum"),
-            bad_coordinates=("bad_coordinates", "sum"),
             clean_trips=("clean", "sum"),
         )
     )
 
     # Apply final cleaning mask
-    clean_mask = correct_datetimes & coordinates_reasonable
+    clean_mask = valid_time
     dfs[i] = df[clean_mask].reset_index(drop=True)
 
 # Final map-reduce over all files
