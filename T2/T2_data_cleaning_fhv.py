@@ -72,7 +72,7 @@ for i in tqdm(range(len(dfs))):
 print("Computing stats...")
 combined_stats_ddf = dd.concat(stats_ddfs)
 final_stats_ddf = combined_stats_ddf.groupby("year").sum()
-final_stats = final_stats_ddf.compute().reset_index()
+final_stats = final_stats_ddf.compute().reset_index().sort_values("year")
 
 # Save stats to CSV
 os.makedirs(os.path.join(TASK2_OUT_ROOT), exist_ok=True)

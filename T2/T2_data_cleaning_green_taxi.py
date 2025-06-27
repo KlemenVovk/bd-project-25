@@ -115,7 +115,7 @@ for i in tqdm(range(len(dfs))):
 # Reduce all stats with Dask
 print("Computing stats...")
 final_stats_ddf = dd.concat(stats_ddfs).groupby("year").sum()
-final_stats = final_stats_ddf.compute().reset_index()
+final_stats = final_stats_ddf.compute().reset_index().sort_values("year")
 
 # Save to disk
 os.makedirs(os.path.join(TASK2_OUT_ROOT), exist_ok=True)
