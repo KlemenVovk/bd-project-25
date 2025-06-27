@@ -10,6 +10,7 @@ TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"
 
 # TASK 1
 TASK1_OUT_ROOT = "data/T1"
+TASK2_OUT_ROOT = "data/T2"
 # TASK1_OUT_ROOT = "/d/hpc/projects/FRI/kv4582/bd25/task1"
 TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
 ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
@@ -168,12 +169,5 @@ NYC_MOST_EAST_LONGITUDE = -73.708116
 NYC_MOST_NORTH_LATITUDE = 40.908582
 NYC_MOST_SOUTH_LATITUDE = 40.505232
 
-MAX_SPEED = 80 # mph
-REASONABLE_PRICE_MIN = 2.5 # initial charge
-REASONABLE_PRICE_MAX = 500
-REASONABLE_MIN_TRIP_DURATION = 1 # in minutes
-REASONABLE_MAX_TRIP_DURATION = 6 * 60 # in minutes
-REASONABLE_MIN_YEAR = 2008 # first year of NYC taxi data -1 (trips with pickup on 2008-12-31)
-REASONABLE_MAX_YEAR = 2025 # last year of NYC taxi data
 
 
