@@ -1,0 +1,173 @@
+import pyarrow as pa
+import numpy as np
+
+RAW_DATA_ROOT = "data/raw"
+CLEAN_PARQUET_DATA_ROOT = "data/clean"
+DUCKDB_CLEAN_DATABASE = "data/duckdb/nyc_database.duckdb"
+RESULTS_ROOT = "results"
+# RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
+TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"
+
+# TASK 1
+TASK1_OUT_ROOT = "data/T1"
+TASK2_OUT_ROOT = "data/T2"
+# TASK1_OUT_ROOT = "/d/hpc/projects/FRI/kv4582/bd25/task1"
+TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
+ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
+LOCATIONID_CENTROID_BOROUGH_CSV = "data/zone_data/locationid_centroid_borough.csv"
+
+TASK1_YELLOWTAXI_SCHEMA = {
+    "vendor_id": np.int8,
+    "pickup_datetime": "datetime64[ns]",
+    "dropoff_datetime": "datetime64[ns]",
+    "passenger_count": np.uint8,
+    "trip_distance": np.float32,
+    "rate_code_id": np.uint8,
+    "store_and_fwd_flag": np.int8,
+    "PULocationID": np.uint16,
+    "DOLocationID": np.uint16,
+    "payment_type": np.uint8,
+    "fare_amount": np.float32,
+    "extra": np.float32,
+    "mta_tax": np.float32,
+    "tip_amount": np.float32,
+    "tolls_amount": np.float32,
+    "improvement_surcharge": np.float32,
+    "total_amount": np.float32,
+    "cbd_congestion_fee": np.float32,
+    "congestion_surcharge": np.float32,
+    "airport_fee": np.float32,
+    "pickup_longitude": np.float32,
+    "pickup_latitude": np.float32,
+    "dropoff_longitude": np.float32,
+    "dropoff_latitude": np.float32,
+    "pickup_borough": "string[pyarrow]",
+    "dropoff_borough": "string[pyarrow]",
+    "year": np.uint16,
+}
+
+TASK1_GREENTAXI_SCHEMA = {
+    "vendor_id": np.int8,
+    "pickup_datetime": "datetime64[ns]",
+    "dropoff_datetime": "datetime64[ns]",
+    "passenger_count": np.uint8,
+    "trip_distance": np.float32,
+    "trip_type": np.uint8,
+    "rate_code_id": np.uint8,
+    "store_and_fwd_flag": np.int8,
+    "PULocationID": np.uint16,
+    "DOLocationID": np.uint16,
+    "payment_type": np.uint8,
+    "fare_amount": np.float32,
+    "extra": np.float32,
+    "ehail_fee": np.float32,
+    "mta_tax": np.float32,
+    "tip_amount": np.float32,
+    "tolls_amount": np.float32,
+    "improvement_surcharge": np.float32,
+    "total_amount": np.float32,
+    "cbd_congestion_fee": np.float32,
+    "congestion_surcharge": np.float32,
+    "pickup_longitude": np.float32,
+    "pickup_latitude": np.float32,
+    "dropoff_longitude": np.float32,
+    "dropoff_latitude": np.float32,
+    "pickup_borough": "string[pyarrow]",
+    "dropoff_borough": "string[pyarrow]",
+    "year": np.uint16,
+}
+
+TASK1_FHV_SCHEMA = {
+    "dispatching_base_num": "string[pyarrow]",
+    "pickup_datetime": "datetime64[ns]",
+    "dropoff_datetime": "datetime64[ns]",
+    "PULocationID": np.uint16,
+    "DOLocationID": np.uint16,
+    "SR_flag": np.int8,
+    "affiliated_base_number": "string[pyarrow]",
+    "pickup_longitude": np.float32,
+    "pickup_latitude": np.float32,
+    "dropoff_longitude": np.float32,
+    "dropoff_latitude": np.float32,
+    "pickup_borough": "string[pyarrow]",
+    "dropoff_borough": "string[pyarrow]",
+    "year": np.uint16,
+}
+
+TASK1_FHVHV_SCHEMA = {
+    'DOLocationID': np.uint16,
+    'PULocationID': np.uint16,
+    'access_a_ride_flag': np.int8,
+    'shared_request_flag': np.int8,
+    'shared_match_flag': np.int8,
+    'wav_request_flag': np.int8,
+    'wav_match_flag': np.int8,
+    'airport_fee': np.float32,
+    'base_passenger_fare': np.float32,
+    'bcf': np.float32,
+    'cbd_congestion_fee': np.float32,
+    'congestion_surcharge': np.float32,
+    'dispatching_base_num': "string[pyarrow]",
+    'driver_pay': np.float32,
+    'hvfhs_license_num': "string[pyarrow]",
+    'on_scene_datetime': "datetime64[ns]",
+    'originating_base_num': "string[pyarrow]",
+    'pickup_datetime': "datetime64[ns]",
+    'dropoff_datetime': "datetime64[ns]",
+    'request_datetime': "datetime64[ns]",
+    'sales_tax': np.float32,
+    'tips': np.float32,
+    'tolls': np.float32,
+    'trip_distance': np.float32,
+    'trip_time': np.float32,
+    'pickup_longitude': np.float32,
+    'pickup_latitude': np.float32,
+    'dropoff_longitude': np.float32,
+    'dropoff_latitude': np.float32,
+    "pickup_borough": "string[pyarrow]",
+    "dropoff_borough": "string[pyarrow]",
+    "year": np.uint16,
+}
+
+
+COLUMN_CONSISTENCY_NAMING_MAP = {
+    "End_Lat": "dropoff_latitude",
+    "End_Lon": "dropoff_longitude",
+    "Start_Lat": "pickup_latitude",
+    "Start_Lon": "pickup_longitude",
+    "Fare_Amt": "fare_amount",
+    "Tip_Amt": "tip_amount",
+    "Tolls_Amt": "tolls_amount",
+    "Total_Amt": "total_amount",
+    "Passenger_Count": "passenger_count",
+    "Payment_Type": "payment_type",
+    "Rate_Code": "rate_code_id",
+    "rate_code": "rate_code_id",
+    "RatecodeID": "rate_code_id",
+    "Trip_Distance": "trip_distance",
+    "Trip_Dropoff_DateTime": "tpep_dropoff_datetime",
+    "Trip_Pickup_DateTime": "tpep_pickup_datetime",
+    "tpep_dropoff_datetime": "dropoff_datetime",
+    "tpep_pickup_datetime": "pickup_datetime",
+    "lpep_dropoff_datetime": "dropoff_datetime",
+    "lpep_pickup_datetime": "pickup_datetime",
+    "dropOff_datetime": "dropoff_datetime",
+    "Airport_fee": "airport_fee",
+    "VendorID": "vendor_id",
+    "vendor_name": "vendor_id",
+    "surcharge": "extra",
+    "store_and_forward": "store_and_fwd_flag",
+    "Affiliated_base_number": "affiliated_base_number",
+    "SR_Flag": "SR_flag",
+    "PUlocationID": "PULocationID",
+    "DOlocationID": "DOLocationID",
+    "trip_miles": "trip_distance",
+}
+
+NYC_MOST_WEST_LONGITUDE = -74.248064
+NYC_MOST_EAST_LONGITUDE = -73.708116
+NYC_MOST_NORTH_LATITUDE = 40.908582
+NYC_MOST_SOUTH_LATITUDE = 40.505232
+
+
+
