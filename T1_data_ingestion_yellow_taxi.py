@@ -112,12 +112,13 @@ if __name__ == "__main__":
         dfs[i] = dfs[i].drop(columns=['LocationID_x', 'LocationID_y', 'Zone_y', 'service_zone_y', 'Zone_x', 'service_zone_x'], errors='ignore')
 
         if 'airport_fee' not in dfs[i].columns:
-            # set airport_fee to 0
             dfs[i]['airport_fee'] = 0.0
         if 'congestion_surcharge' not in dfs[i].columns:
             dfs[i]['congestion_surcharge'] = 0.0
         if 'improvement_surcharge' not in dfs[i].columns:
             dfs[i]['improvement_surcharge'] = 0.0
+        if 'cbd_congestion_fee' not in dfs[i].columns:
+            dfs[i]['cbd_congestion_fee'] = 0.0
         dfs[i]['mta_tax'] = dfs[i]['mta_tax'].fillna(0.0)
         # parse datetimes
         dfs[i]['pickup_datetime'] = dd.to_datetime(dfs[i]['pickup_datetime'], errors='raise')
@@ -128,6 +129,7 @@ if __name__ == "__main__":
         dfs[i]['improvement_surcharge'] = dfs[i]['improvement_surcharge'].fillna(0.0).astype(float)
         dfs[i]['extra'] = dfs[i]['extra'].fillna(0.0).astype(float)
         dfs[i]['passenger_count'] = dfs[i]['passenger_count'].fillna(0).astype(int)
+        dfs[i]['cbd_congestion_fee'] = dfs[i]['cbd_congestion_fee'].fillna(0.0).astype(float)
 
     
     # Save everything
@@ -140,6 +142,7 @@ if __name__ == "__main__":
     # Concat and repartition so that a division is every 100_000 rows.
     
     for ddf in tqdm(dfs):
+        assert sorted(set(TASK1_YELLOWTAXI_SCHEMA.keys())) == sorted(set(ddf.columns.tolist())), f"Columns in ddf {sorted(ddf.columns.tolist())} do not match the schema {sorted(TASK1_YELLOWTAXI_SCHEMA.keys())}"
         ddf = ddf.astype(TASK1_YELLOWTAXI_SCHEMA)     
         ddf.to_parquet(
             os.path.join(TASK1_OUT_ROOT, "yellow_tripdata"),

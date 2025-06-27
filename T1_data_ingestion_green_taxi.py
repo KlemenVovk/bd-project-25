@@ -152,6 +152,7 @@ if __name__ == "__main__":
     # Concat and repartition so that a division is every 100_000 rows.
     
     for ddf in tqdm(dfs):
+        assert sorted(set(TASK1_GREENTAXI_SCHEMA.keys())) == sorted(set(ddf.columns.tolist())), f"Columns in ddf {sorted(ddf.columns.tolist())} do not match the schema {sorted(TASK1_GREENTAXI_SCHEMA.keys())}"
         ddf = ddf.astype(TASK1_GREENTAXI_SCHEMA)     
         ddf.to_parquet(
             os.path.join(TASK1_OUT_ROOT, "green_tripdata"),
