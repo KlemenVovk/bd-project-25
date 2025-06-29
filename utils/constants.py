@@ -9,7 +9,9 @@ TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"
 # TASK 1
 TASK1_OUT_ROOT = "data/T1"
 TASK2_OUT_ROOT = "data/T2"
-TASK%_OUT_ROOT = "data/T5"
+TASK5_OUT_ROOT = "data/T5"
+TASK6_OUT_ROOT = "data/T6"
+TASK8_OUT_ROOT = "data/T8"
 # TASK1_OUT_ROOT = "/d/hpc/projects/FRI/kv4582/bd25/task1"
 TAXI_ZONES_SHAPEFILE = "data/zone_data/taxi_zones.shp"
 ZONES_TO_CENTROIDS_MAPPING_CSV = "data/zone_data/zones_to_centroids_mapping.csv"
@@ -94,35 +96,35 @@ TASK1_FHV_SCHEMA = {
 }
 
 TASK1_FHVHV_SCHEMA = {
-    'DOLocationID': np.uint16,
-    'PULocationID': np.uint16,
-    'access_a_ride_flag': np.int8,
-    'shared_request_flag': np.int8,
-    'shared_match_flag': np.int8,
-    'wav_request_flag': np.int8,
-    'wav_match_flag': np.int8,
-    'airport_fee': np.float32,
-    'base_passenger_fare': np.float32,
-    'bcf': np.float32,
-    'cbd_congestion_fee': np.float32,
-    'congestion_surcharge': np.float32,
-    'dispatching_base_num': "string[pyarrow]",
-    'driver_pay': np.float32,
-    'hvfhs_license_num': "string[pyarrow]",
-    'on_scene_datetime': "datetime64[ns]",
-    'originating_base_num': "string[pyarrow]",
-    'pickup_datetime': "datetime64[ns]",
-    'dropoff_datetime': "datetime64[ns]",
-    'request_datetime': "datetime64[ns]",
-    'sales_tax': np.float32,
-    'tips': np.float32,
-    'tolls': np.float32,
-    'trip_distance': np.float32,
-    'trip_time': np.float32,
-    'pickup_longitude': np.float32,
-    'pickup_latitude': np.float32,
-    'dropoff_longitude': np.float32,
-    'dropoff_latitude': np.float32,
+    "DOLocationID": np.uint16,
+    "PULocationID": np.uint16,
+    "access_a_ride_flag": np.int8,
+    "shared_request_flag": np.int8,
+    "shared_match_flag": np.int8,
+    "wav_request_flag": np.int8,
+    "wav_match_flag": np.int8,
+    "airport_fee": np.float32,
+    "base_passenger_fare": np.float32,
+    "bcf": np.float32,
+    "cbd_congestion_fee": np.float32,
+    "congestion_surcharge": np.float32,
+    "dispatching_base_num": "string[pyarrow]",
+    "driver_pay": np.float32,
+    "hvfhs_license_num": "string[pyarrow]",
+    "on_scene_datetime": "datetime64[ns]",
+    "originating_base_num": "string[pyarrow]",
+    "pickup_datetime": "datetime64[ns]",
+    "dropoff_datetime": "datetime64[ns]",
+    "request_datetime": "datetime64[ns]",
+    "sales_tax": np.float32,
+    "tips": np.float32,
+    "tolls": np.float32,
+    "trip_distance": np.float32,
+    "trip_time": np.float32,
+    "pickup_longitude": np.float32,
+    "pickup_latitude": np.float32,
+    "dropoff_longitude": np.float32,
+    "dropoff_latitude": np.float32,
     "pickup_borough": "string[pyarrow]",
     "dropoff_borough": "string[pyarrow]",
     "year": np.uint16,
@@ -167,6 +169,3 @@ NYC_MOST_WEST_LONGITUDE = -74.248064
 NYC_MOST_EAST_LONGITUDE = -73.708116
 NYC_MOST_NORTH_LATITUDE = 40.908582
 NYC_MOST_SOUTH_LATITUDE = 40.505232
-
-
-
