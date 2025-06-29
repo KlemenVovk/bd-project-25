@@ -9,6 +9,7 @@ TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"
 # TASK 1
 TASK1_OUT_ROOT = "data/T1"
 TASK2_OUT_ROOT = "data/T2"
+TASK3_OUT_ROOT = "data/T3"
 TASK5_OUT_ROOT = "data/T5"
 TASK6_OUT_ROOT = "data/T6"
 TASK8_OUT_ROOT = "data/T8"

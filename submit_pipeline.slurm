@@ -40,4 +40,18 @@ PYTHONPATH="." python T2/T2_data_cleaning_fhv.py
 echo "Running data cleaning for fhvhv trip data..."
 PYTHONPATH="." python T2/T2_data_cleaning_fhvhv.py
 
+echo "TASK 3: File format analysis"
+echo "Benchmarking file formats..."
+PYTHONPATH="." python T3/T3_file_format_analysis.py
+
+echo "TASK 4: Exploratory Data Analysis"
+echo "Running EDA for yellow taxi trip data..."
+PYTHONPATH="." python T4/T4_eda_yellow_taxi.py
+echo "Running EDA for green taxi trip data..."
+PYTHONPATH="." python T4/T4_eda_green_taxi.py
+echo "Running EDA for fhv trip data..."
+PYTHONPATH="." python T4/T4_eda_fhv.py
+echo "Running EDA for fhvhv trip data..."
+PYTHONPATH="." python T4/T4_eda_fhvhv.py
+
 echo "Pipeline completed successfully."
