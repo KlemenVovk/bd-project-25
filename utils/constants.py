@@ -1,8 +1,10 @@
 import pyarrow as pa
 import numpy as np
+import os
 
 RAW_DATA_ROOT = "data/raw"
 RESULTS_ROOT = "results"
+LATEX_ROOT = os.path.join(RESULTS_ROOT, "latex")
 # RAW_DATA_ROOT = "/d/hpc/projects/FRI/bigdata/data/Taxi/"
 TAXI_ZONES_LOOKUP_CSV = "data/zone_data/taxi_zone_lookup.csv"
 
