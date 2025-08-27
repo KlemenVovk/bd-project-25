@@ -1,0 +1,3 @@
+model,macro_accuracy,macro_f1
+Majority baseline,0.3333333333333333,0.2507036939309023
+"XGB(incremental, balanced)",0.5726855137951147,0.4882602277955212

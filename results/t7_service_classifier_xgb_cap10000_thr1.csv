@@ -1,4 +1,3 @@
 model,macro_accuracy,macro_f1
 Majority baseline,0.3333333333333333,0.24999270854600075
-"SGD(partial_fit, balanced)",0.5515949074156925,0.4836456799774734
 "XGB(incremental, balanced)",0.5588325835315698,0.4481893273614166

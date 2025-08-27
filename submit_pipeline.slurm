@@ -58,7 +58,7 @@ echo "Running post-processing for all trip data..."
 PYTHONPATH="." python T4/T4_postprocess.py
 
 echo "TASK 7: Modeling Service Types"
-echo "Running modeling for service types..."
+echo "Running modeling for service types (scaling experiments)..."
 PYTHONPATH="." python T7/T7_modeling_service_types.py
 
 echo "Pipeline completed successfully."
