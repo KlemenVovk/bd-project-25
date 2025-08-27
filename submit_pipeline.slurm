@@ -29,7 +29,6 @@ PYTHONPATH="." python T1/T1_data_ingestion_fhv.py
 echo "Ingesting fhvhv trip data..."
 PYTHONPATH="." python T1/T1_data_ingestion_fhvhv.py
 
-#### TASK 2: Cleaning
 echo "TASK 2: Data Cleaning"
 echo "Running data cleaning for yellow taxi trip data..."
 PYTHONPATH="." python T2/T2_data_cleaning_yellow_taxi.py
@@ -57,5 +56,9 @@ echo "Running EDA for fhvhv trip data..."
 PYTHONPATH="." python T4/T4_eda_fhvhv.py
 echo "Running post-processing for all trip data..."
 PYTHONPATH="." python T4/T4_postprocess.py
+
+echo "TASK 7: Modeling Service Types"
+echo "Running modeling for service types..."
+PYTHONPATH="." python T7/T7_modeling_service_types.py
 
 echo "Pipeline completed successfully."
