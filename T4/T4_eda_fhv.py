@@ -59,12 +59,15 @@ data["trips_per_hour"] = con.execute(f"""
 """).fetchdf().to_dict(orient="records")
 
 # Volume aggregates
-print("DuckDB: trip duration stats using datetime diff...")
+print("DuckDB: median trip duration (seconds)...")
 data["median_duration"] = con.execute(f"""
-    SELECT 
-        MEDIAN(EXTRACT(EPOCH FROM (dropoff_datetime - pickup_datetime))) AS median_trip_duration_sec
+    SELECT
+        MEDIAN(
+            date_part('epoch', dropoff_datetime) -
+            date_part('epoch', pickup_datetime)
+        ) AS median_trip_duration_sec
     FROM read_parquet('{parquet_path}')
-    WHERE dropoff_datetime > pickup_datetime AND year >= 2018
+    WHERE dropoff_datetime > pickup_datetime
 """).fetchdf().to_dict(orient="records")
 
 # --- Spatial Aggregates ---

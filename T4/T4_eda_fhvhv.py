@@ -62,13 +62,16 @@ data["median_tip"] = con.execute(f"""
     SELECT 
         MEDIAN(tips) AS median_tip
     FROM read_parquet('{parquet_path}')
-    WHERE tips IS NOT NULL
+    WHERE tips > 0
 """).fetchdf().to_dict(orient="records")
 
 print("DuckDB: median trip duration (seconds)...")
 data["median_duration"] = con.execute(f"""
-    SELECT 
-        MEDIAN(DATE_PART('second', dropoff_datetime - pickup_datetime)) AS median_trip_duration_sec
+    SELECT
+        MEDIAN(
+            date_part('epoch', dropoff_datetime) -
+            date_part('epoch', pickup_datetime)
+        ) AS median_trip_duration_sec
     FROM read_parquet('{parquet_path}')
     WHERE dropoff_datetime > pickup_datetime
 """).fetchdf().to_dict(orient="records")
@@ -78,7 +81,7 @@ data["median_fare"] = con.execute(f"""
     SELECT 
         MEDIAN(base_passenger_fare) AS median_fare_amount
     FROM read_parquet('{parquet_path}')
-    WHERE base_passenger_fare IS NOT NULL
+    WHERE base_passenger_fare > 0
 """).fetchdf().to_dict(orient="records")
 
 print("Computing tip vs no-tip percentages (Dask)...")

@@ -55,5 +55,7 @@ echo "Running EDA for fhv trip data..."
 PYTHONPATH="." python T4/T4_eda_fhv.py
 echo "Running EDA for fhvhv trip data..."
 PYTHONPATH="." python T4/T4_eda_fhvhv.py
+echo "Running post-processing for all trip data..."
+PYTHONPATH="." python T4/T4_postprocess.py
 
 echo "Pipeline completed successfully."
