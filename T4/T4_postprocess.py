@@ -8,7 +8,7 @@ import seaborn as sns
 from utils.constants import RESULTS_ROOT, LATEX_ROOT
 
 # ---- Setup ----
-sns.set_theme()
+sns.set_theme(style="whitegrid")
 
 FIG_DIR = os.path.join(LATEX_ROOT, "figures")
 TAB_DIR = os.path.join(LATEX_ROOT, "tables")
