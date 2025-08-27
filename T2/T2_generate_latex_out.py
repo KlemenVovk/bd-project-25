@@ -28,9 +28,9 @@ files = {
 
 # used ONLY for charts (visualization); tables aggregate across ALL years
 cutoff_years = {
-    "Yellow taxi": (2011, 2025),
-    "Green taxi": (2013, 2025),
-    "FHV": (2014, 2025),
+    "Yellow taxi": (2012, 2025),
+    "Green taxi": (2014, 2025),
+    "FHV": (2015, 2025),
     "FHVHV": (2019, 2025)
 }
 

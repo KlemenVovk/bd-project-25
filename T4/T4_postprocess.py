@@ -272,6 +272,36 @@ if hour_rows:
     plt.savefig(os.path.join(FIG_DIR, "t4_hourly_share_lines.pdf"))
     plt.close()
 
+# =============================================================================
+# 4) OD flow heatmaps (borough→borough, per service)
+# =============================================================================
+
+def od_matrix(service):
+    d = agg.get(service, {})
+    od = pd.DataFrame(d.get("od_matrix_borough", []))
+    if od.empty: return None
+    od = od.rename(columns={"pickup_borough":"pu","dropoff_borough":"do"})
+    all_b = sorted(set(od["pu"]).union(od["do"]))
+    mat = od.pivot_table(index="pu", columns="do", values="num_trips", aggfunc="sum").reindex(index=all_b, columns=all_b).fillna(0.0)
+    # row-normalize to show destination split per pickup borough
+    row_sums = mat.sum(axis=1).replace(0, np.nan)
+    mat = (mat.T / row_sums).T.fillna(0.0)
+    return mat
+
+ods = {svc: od_matrix(svc) for svc in services}
+if any(m is not None for m in ods.values()):
+    fig, axes = plt.subplots(2, 2, figsize=(11, 9))
+    axes = axes.flatten()
+    for ax, svc in zip(axes, services):
+        m = ods.get(svc)
+        if m is not None and not m.empty:
+            sns.heatmap(m, ax=ax, vmin=0, vmax=1, cbar_kws={"shrink":0.7}, square=True, annot=True, fmt=".2f")
+            ax.set_title(f"{svc}: OD shares (row-normalized)")
+            ax.set_xlabel("Dropoff borough"); ax.set_ylabel("Pickup borough")
+        else:
+            ax.axis("off")
+    plt.tight_layout()
+    plt.savefig(os.path.join(FIG_DIR, "t4_od_borough_heatmaps.pdf")); plt.close()
 
 print("[OK] Figures →", FIG_DIR)
 print("[OK] Tables  →", TAB_DIR)
