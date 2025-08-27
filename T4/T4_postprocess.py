@@ -233,6 +233,45 @@ tf_tbl.to_latex(
     caption="Tips, fares, and duration summary: tipped share (\\%), median tip, median fare, and median duration in minutes (where available).",
     label="tab:t4_tips_fares_duration"
 )
+# =============================================================================
+# 6) Hourly pickup share — multiline plot
+# =============================================================================
+hour_rows = []
+for svc in services:
+    recs = agg[svc].get("trips_per_hour", [])
+    if not recs: 
+        continue
+    dfh = pd.DataFrame(recs)
+    # accept either 'hour' or 'hour_of_day'
+    if "hour" in dfh.columns and "hour_of_day" not in dfh.columns:
+        dfh = dfh.rename(columns={"hour": "hour_of_day"})
+    if "hour_of_day" not in dfh.columns or "num_trips" not in dfh.columns:
+        continue
+    dfh = dfh.groupby("hour_of_day", as_index=False)["num_trips"].sum()
+    dfh = dfh.sort_values("hour_of_day").query("0 <= hour_of_day <= 23")
+    total = dfh["num_trips"].sum()
+    if total <= 0:
+        continue
+    dfh["share_pct"] = dfh["num_trips"] / total * 100.0
+    dfh["service"] = svc
+    hour_rows.append(dfh[["service","hour_of_day","share_pct"]])
+
+if hour_rows:
+    hour_all = pd.concat(hour_rows, ignore_index=True)
+    plt.figure(figsize=(10.5, 4.2))
+    sns.lineplot(
+        data=hour_all, x="hour_of_day", y="share_pct", hue="service",
+        marker="o"
+    )
+    plt.xlabel("Hour of day")
+    plt.ylabel("Share of trips (%)")
+    plt.xticks(range(0, 24, 2))
+    plt.title("Hourly pickup share by service")
+    plt.legend(title="Service", ncol=2)
+    plt.tight_layout()
+    plt.savefig(os.path.join(FIG_DIR, "t4_hourly_share_lines.pdf"))
+    plt.close()
+
 
 print("[OK] Figures →", FIG_DIR)
 print("[OK] Tables  →", TAB_DIR)
